@@ -5,7 +5,7 @@
 
 let sudokuArr = new Array(9)
 let emptyList = []
-let finalResults = []
+
 function input (inputStr) {
   let inputStrs = inputStr.split(',')
   inputStrs.forEach((item, index) => {
