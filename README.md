@@ -43,4 +43,4 @@ TODO（V1.0.2）
 
 欢迎关注微博
 ----------
-[点击关注]((http://weibo.com/DeveloperLee))
+[点击关注](http://weibo.com/DeveloperLee)
