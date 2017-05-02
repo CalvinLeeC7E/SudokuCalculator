@@ -1,9 +1,6 @@
 .panel {
   display: flex;
   flex-direction: column;
-  display: -webkit-flex;
-  -webkit-flex-direction: column;
-
   border: 3px solid gray;
   padding: 0;
   margin: 0;
@@ -13,17 +10,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  display: -webkit-flex;
-  -webkit-flex-direction: column;
-  -webkit-align-items: center;
 }
 
 .row {
   display: flex;
   flex-direction: row;
-  display: -webkit-flex;
-  -webkit-flex-direction: row;
   height: 11%;
   border-bottom: 1px solid gray;
 }
@@ -45,9 +36,7 @@
   margin: 0;
   border-right: 1px solid gray;
   flex: 1;
-  -webkit-flex: 1;
   justify-content: center;
-  -webkit-justify-content: center;
 }
 
 .cloumn:nth-child(3) {
@@ -80,9 +69,6 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  display: -webkit-flex;
-  -webkit-flex-direction: row;
-  -webkit-justify-content: center;
 }
 
 .btn {
