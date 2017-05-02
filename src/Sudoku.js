@@ -2,88 +2,108 @@
 //TODO 对输入的数据进行一次校验，看输入的是否合理，如果输入的数据本身就是错误的，那么不处理
 //TODO 优化每个位置的可用值，根据空格位置的行、列、块的情况，可以推算出可用的数据，减少尝试次数，避免无用尝试
 
-
-let sudokuArr = new Array(9)
-let emptyList = []
-
-function input (inputStr) {
-  let inputStrs = inputStr.split(',')
-  inputStrs.forEach((item, index) => {
-    sudokuArr[index] = []
-    for (let i = 0; i < 9; i++) {
-      let char = item.charAt(i)
-      if (char == '#') emptyList.push([index, i])
-      sudokuArr[index].push(char)
-    }
-  })
-}
-
-function print () {
-  console.log('#######################')
-  sudokuArr.forEach(item => {
-    console.log(item)
-    console.log('\n')
-  })
-  console.log('#######################')
-}
-
-function getData (emptyItem) {
-  //行数据
-  let row = [].concat(sudokuArr[emptyItem[0]])
-  //列数据
-  let column = []
-  for (let i = 0; i < 9; i++) {
-    column.push(sudokuArr[i][emptyItem[1]])
+class Sudoku {
+  constructor () {
+    this.sudokuArr = new Array(9)
+    this.emptyList = []
+    this.sudokuResult = []
   }
-  //块数据
-  let block = []
-  let rowStartIndex = parseInt((emptyItem[0] + 0) / 3) * 3
-  let columnStartIndex = parseInt((emptyItem[1] + 0) / 3) * 3
-  for (let row = rowStartIndex; row < rowStartIndex + 3; row++) {
-    for (let cloumn = columnStartIndex; cloumn < columnStartIndex + 3; cloumn++) {
-      block.push(sudokuArr[row][cloumn])
-    }
-  }
-  return [row, column, block]
-}
 
-//[ '#', '6', '2', '5', '#', '#', '#', '4', '#' ]
-//[ 0, 0 ]
-function check (emptyItem, value) {
-  sudokuArr[emptyItem[0]][emptyItem[1]] = '#'
-  let result = true
-  let datas = getData(emptyItem)
-  datas.forEach(item => {
-    item.forEach(itemData => {
-      if (itemData == value) {
-        result = false
+  //输入数独字符串
+  input (inputStr) {
+    let inputStrs = inputStr.split(',')
+    inputStrs.forEach((item, index) => {
+      if (item.length > 0) {
+        this.sudokuArr[index] = []
+        for (let i = 0; i < 9; i++) {
+          let char = item.charAt(i)
+          if (char == '#') this.emptyList.push([index, i])
+          this.sudokuArr[index].push(char)
+        }
       }
     })
-  })
-  if (result) {
-    sudokuArr[emptyItem[0]][emptyItem[1]] = value
   }
-  return result
-}
 
-function cleanError (from) {
-  let length = emptyList.length
-  for (let i = from; i < length; i++) {
-    let emptyItem = emptyList[i]
-    sudokuArr[emptyItem[0]][emptyItem[1]] = '#'
+  //输出数独字符串
+  output () {
+    let result = []
+    this.sudokuArr.forEach(item => {
+      item.forEach(i_item => {
+        result.push(i_item)
+      })
+    })
+    return result.join('')
   }
-}
 
-function findEmpty (count) {
-  if (emptyList.length == count) {
-    print()
-    return
-  } else {
-    for (let i = 1; i <= 9; i++) {
-      //清空后面尝试的填写
-      cleanError(count)
-      if (check(emptyList[count], '' + i)) {
-        findEmpty(count + 1)
+  //打印数独，便于调试
+  print () {
+    console.log('#######################')
+    this.sudokuArr.forEach(item => {
+      console.log(item)
+      console.log('\n')
+    })
+    console.log('#######################')
+  }
+
+  //获取当前空格所在行、列、块的数据
+  getData (emptyItem) {
+    //行数据
+    let rowP = emptyItem[0]
+    let columnP = emptyItem[1]
+    let row = [].concat(this.sudokuArr[rowP])
+    //列数据
+    let column = []
+    for (let i = 0; i < 9; i++) {
+      column.push(this.sudokuArr[i][columnP])
+    }
+    //块数据
+    let block = []
+    let rowStartIndex = parseInt((rowP + 0) / 3) * 3
+    let columnStartIndex = parseInt((columnP + 0) / 3) * 3
+    for (let row = rowStartIndex; row < rowStartIndex + 3; row++) {
+      for (let cloumn = columnStartIndex; cloumn < columnStartIndex + 3; cloumn++) {
+        block.push(this.sudokuArr[row][cloumn])
+      }
+    }
+    return [row, column, block]
+  }
+
+  check (emptyItem, value) {
+    this.sudokuArr[emptyItem[0]][emptyItem[1]] = '#'
+    let result = true
+    let datas = this.getData(emptyItem)
+    datas.forEach(item => {
+      item.forEach(itemData => {
+        if (itemData == value) {
+          result = false
+        }
+      })
+    })
+    if (result) {
+      this.sudokuArr[emptyItem[0]][emptyItem[1]] = value
+    }
+    return result
+  }
+
+  cleanError (from) {
+    let length = this.emptyList.length
+    for (let i = from; i < length; i++) {
+      let emptyItem = this.emptyList[i]
+      this.sudokuArr[emptyItem[0]][emptyItem[1]] = '#'
+    }
+  }
+
+  findEmpty (count) {
+    if (this.emptyList.length == count) {
+      this.sudokuResult.push(this.output())
+      return
+    } else {
+      for (let i = 1; i <= 9; i++) {
+        //清空后面已尝试的填写
+        this.cleanError(count)
+        if (this.check(this.emptyList[count], '' + i)) {
+          this.findEmpty(count + 1)
+        }
       }
     }
   }
@@ -100,6 +120,5 @@ function findEmpty (count) {
 // input('##1#82###,######3#6,#######7#,####2#18#,#6#######,5########,##8###7##,###3#6##4,#####5###')
 // input('#172498##,######2#7,#####59##,##5##6###,86##3##91,###9##3##,##87#####,7#6######,##962375#')
 // console.log(emptyList.length)
-print()
-findEmpty(0)
-console.log(emptyList.length)
+// print()
+// findEmpty(0)

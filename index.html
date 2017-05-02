@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SudokuCalculator</title>
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <script src="https://unpkg.com/vue@2.2.6/dist/vue.js"></script>
+  <link rel="stylesheet" href="lib/css/SudokuCalculator.css">
+  <script src="lib/js/Sudoku.js"></script>
+</head>
+<body>
+<div id="main_view">
+  <div class="panel" id="panel">
+    <div class="row" v-for="i in 9">
+      <div class="cloumn horizontal_center" :class="currentItem == indexProc(i,j) ? 'select':''"
+           v-for="j in 9" @click="selectItem(indexProc(i,j))">
+        <div class="content" v-if="sudokuArr[indexProc(i,j)]" :class="sudokuArr[indexProc(i,j)].isResult ? 'result_content':''">
+          {{sudokuArr[indexProc(i,j)].value}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="btn_block">
+    <div class="small_btn" @click="inputNum(item)" v-for="item in 9">{{item}}</div>
+    <div class="small_btn" @click="inputNum(undefined)">X</div>
+  </div>
+  <div class="btn_block">
+    <div class="btn" @click="calculator">计算</div>
+    <div class="btn" @click="clean">清空</div>
+    <div class="btn" @click="reload">重置</div>
+  </div>
+</div>
+</body>
+<script>
+  new Vue({
+    el: '#main_view',
+    data: {
+      sudokuArr: new Array(81),
+      currentItem: null
+    },
+    mounted: function () {
+      this.initDemo()
+    },
+    methods: {
+      initDemo: function () {
+        let demo = '#6#5###4#,5###8#7#1,##3#4##5#,#####85#6,##6#3##1#,###6#####,35#16#284,#48#9###5,2#7###3#9'
+        this.sudokuArr = demo.replace(/,/g, '').split('').map(item => {
+          if (item != '#') {
+            return {value: item, isResult: false}
+          } else {
+            return {value: undefined, isResult: false}
+          }
+        })
+      },
+      indexProc: function (row, column) {
+        return (row - 1 ) * 9 + (column - 1)
+      },
+      selectItem: function (index) {
+        this.currentItem = this.currentItem == index ? null : index
+      },
+      calculator: function () {
+        this.currentItem = null
+        let arr = this.sudokuArr
+        let result = []
+        for (let i = 0; i < 81; i++) {
+          let value = arr[i] ? arr[i].value : undefined
+          if (value == undefined) {
+            result.push('#')
+          } else {
+            result.push(value)
+          }
+          if ((i + 1) % 9 == 0) {
+            result.push(',')
+          }
+        }
+        let sudoku = new Sudoku()
+        sudoku.input(result.join(''))
+        sudoku.findEmpty(0)
+        if (sudoku.sudokuResult.length > 0) {
+          let resultStr = sudoku.sudokuResult[0]
+          sudoku.emptyList.forEach(item => {
+            Vue.set(this.sudokuArr, item[0] * 9 + item[1], {
+              value: resultStr.charAt(item[0] * 9 + item[1]),
+              isResult: true
+            })
+          })
+        }
+      },
+      clean: function () {
+        this.sudokuArr = new Array(81)
+      },
+      inputNum: function (num) {
+        if (this.currentItem == null) return
+        Vue.set(this.sudokuArr, this.currentItem, {value: num, isResult: false})
+      },
+      reload: function () {
+        location.reload()
+      }
+    }
+  })
+
+  if (document.documentElement.clientWidth > document.documentElement.clientHeight) {
+    document.getElementById('panel').style.width = document.documentElement.clientHeight * 0.7 + 'px'
+    document.getElementById('panel').style.height = document.documentElement.clientHeight * 0.7 + 'px'
+  } else {
+    document.getElementById('panel').style.height = document.documentElement.clientWidth + 'px'
+  }
+</script>
+</html>
