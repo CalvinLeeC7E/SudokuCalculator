@@ -9,7 +9,7 @@
   <script src="lib/js/Sudoku.js"></script>
 </head>
 <body>
-<div id="main_view">
+<div id="main_view" class="main_view">
   <div class="panel" id="panel">
     <div class="row" v-for="i in 9">
       <div class="cloumn horizontal_center" :class="currentItem == indexProc(i,j) ? 'select':''"
