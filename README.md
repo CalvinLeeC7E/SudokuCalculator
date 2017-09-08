@@ -18,7 +18,7 @@ Demo
 ------
 [在线Demo](https://llb421270473.github.io/SudokuCalculator/)
 
-[](images/demo.png)
+![](images/demo.png)
 
 更新日志
 ---------
