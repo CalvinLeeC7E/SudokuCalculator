@@ -14,6 +14,12 @@ JavaScript实现数独计算器
 
 可计算有20个以上线索的数独，但性能需要优化，有些特殊情况需要计算很久或者是不可等待的情况
 
+Demo
+------
+[在线Demo](https://llb421270473.github.io/SudokuCalculator/)
+
+[](images/demo.png)
+
 更新日志
 ---------
 V1.0.1 支持Web交互
