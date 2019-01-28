@@ -80,6 +80,7 @@
         }
         let sudoku = new Sudoku()
         sudoku.input(result.join(''))
+        sudoku.genCanUseNum()
         sudoku.findEmpty(0)
         if (sudoku.sudokuResult.length > 0) {
           let resultStr = sudoku.sudokuResult[0]

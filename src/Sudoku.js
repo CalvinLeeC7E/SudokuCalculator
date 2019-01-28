@@ -6,7 +6,30 @@ class Sudoku {
   constructor () {
     this.sudokuArr = new Array(9)
     this.emptyList = []
+    this.emptyListCanUseNum = []
     this.sudokuResult = []
+  }
+
+  // 生成代填空格的可用数字组合
+  genCanUseNum () {
+    const _useNum = (rowI, colI) => {
+      const canNotUseNum = new Set([].concat(this.sudokuArr[rowI]).concat(this.sudokuArr[rowI][colI]))
+      canNotUseNum.delete('#')
+      const canUseNum = []
+      for (let i = 1; i < 10; i++) {
+        if (!canNotUseNum.has('' + i)) canUseNum.push(i)
+      }
+      return canUseNum
+    }
+
+    for (let rowIndex = 0; rowIndex < 9; rowIndex++) {
+      for (let colIndex = 0; colIndex < 9; colIndex++) {
+        const char = this.sudokuArr[rowIndex][colIndex]
+        if (char == '#') {
+          this.emptyListCanUseNum.push(_useNum(rowIndex, colIndex))
+        }
+      }
+    }
   }
 
   //输入数独字符串
@@ -36,9 +59,9 @@ class Sudoku {
   }
 
   //打印数独，便于调试
-  print () {
+  print (data) {
     console.log('#######################')
-    this.sudokuArr.forEach(item => {
+    data.forEach(item => {
       console.log(item)
       console.log('\n')
     })
@@ -98,10 +121,10 @@ class Sudoku {
       this.sudokuResult.push(this.output())
       return
     } else {
-      for (let i = 1; i <= 9; i++) {
+      for (let item of this.emptyListCanUseNum[count]) {
         //清空后面已尝试的填写
         this.cleanError(count)
-        if (this.check(this.emptyList[count], '' + i)) {
+        if (this.check(this.emptyList[count], '' + item)) {
           this.findEmpty(count + 1)
         }
       }
@@ -122,3 +145,20 @@ class Sudoku {
 // console.log(emptyList.length)
 // print()
 // findEmpty(0)
+// ************
+// 测试代码
+// function strChunk (str, size) {
+//   const strArr = str.split('')
+//   const result = []
+//   for (let i = 0; i < size; i++) {
+//     result.push(strArr.splice(0, size))
+//   }
+//   return result
+// }
+//
+// let sudoku = new Sudoku()
+// sudoku.input('#625###4#,59##8#7#1,##3#4##5#,#####85#6,426935#17,87#621###,35#16#284,#48392175,2#7###3#9')
+// sudoku.genCanUseNum()
+// sudoku.print(sudoku.sudokuArr)
+// sudoku.findEmpty(0)
+// sudoku.print(strChunk(sudoku.sudokuResult[0], 9))
