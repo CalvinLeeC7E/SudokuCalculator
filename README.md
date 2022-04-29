@@ -1,7 +1,6 @@
 # SudokuCalculator
 ![VERSION](https://img.shields.io/badge/VERSION-1.0.1-brightgreen.svg)
 ![LANGUAGE](https://img.shields.io/badge/LANGUAGE-JavaScript-orange.svg)
-[![weibo](https://img.shields.io/badge/weibo-DeveloperLee-blue.svg)](http://weibo.com/DeveloperLee)
 
 JavaScript实现数独计算器
 
@@ -16,7 +15,7 @@ JavaScript实现数独计算器
 
 Demo
 ------
-[在线Demo](https://llb421270473.github.io/SudokuCalculator/)
+[在线Demo](https://CalvinLeeC7E.github.io/SudokuCalculator/)
 
 ![](images/demo.png)
 
@@ -46,7 +45,3 @@ TODO（V1.0.2）
 ---------
 1. 完成性能优化（优化解的尝试空间）
 2. 对输入的数据进行初步校验，避免输入数据就是错误的
-
-欢迎关注微博
-----------
-[点击关注](http://weibo.com/DeveloperLee)
